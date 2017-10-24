@@ -32,6 +32,7 @@
 @interface JLVideoPlayerManager : NSObject
 
 @property (nonatomic,copy) NSString *url; ///<设置URL自动播放
+@property (nonatomic,copy) NSString *filePath;///<本地视频文件
 
 @property (nonatomic,weak) id<JLVideoPlayerDelegate> delegate;
 
@@ -46,7 +47,7 @@
 @property (nonatomic,assign,readonly) NSTimeInterval videoDuration;
 
 @property (nonatomic,copy) NSString *cacheFolder;
-@property (nonatomic,assign) BOOL dowload;
+@property (nonatomic,assign) BOOL download;
 
 // use MPVolumeView(not availible)
 //@property (nonatomic,assign) float volume;

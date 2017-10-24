@@ -57,6 +57,8 @@
     if (!_manager) {
         _manager = [[JLVideoPlayerManager alloc] init];
         _manager.delegate = self;
+        _manager.download = YES;
+        _manager.cacheFolder = @"/Users/jacklee/Downloads";
     }
     return _manager;
 }

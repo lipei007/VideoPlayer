@@ -166,40 +166,37 @@
 
 #pragma mark - Setter
 
+- (void)setFilePath:(NSString *)filePath {
+    NSURL *url = [NSURL fileURLWithPath:filePath];
+    AVPlayerItem *tmpItem = [AVPlayerItem playerItemWithURL:url];
+    
+    [self preparePlayerItem:tmpItem];
+}
+
 - (void)setUrl:(NSString *)url {
     
     _url = url;
+    JLPLayerProxyServer *server = [[JLPLayerProxyServer alloc] init];
+    server.cacheFolder = self.cacheFolder;
+    server.download = self.download;
+    AVURLAsset *asset = [AVURLAsset assetWithURL:[server replaceSystemSchemeOfURL:_url]];
+    [asset.resourceLoader setDelegate:server queue:dispatch_get_main_queue()];
+    AVPlayerItem *tmpItem = [AVPlayerItem playerItemWithAsset:asset];
+    
+    self.proxyServer = server;
+    self.asset = asset;
+    
+    [self preparePlayerItem:tmpItem];
+}
+
+
+- (void)preparePlayerItem:(AVPlayerItem *)item {
+    
     
     if (_item) {
         [self itemRemoveObserver];
     }
-    
-    
-
-    if (false) {
-        // 系统
-        NSURL *URL = nil;
-        
-        if (true) {
-            URL = [NSURL URLWithString:_url]; // 网络
-        } else {
-            URL = [NSURL fileURLWithPath:_url]; // 本地
-        }
-        
-        _item = [AVPlayerItem playerItemWithURL:URL];
-        
-    } else {
-        JLPLayerProxyServer *server = [[JLPLayerProxyServer alloc] init];
-        server.cacheFolder = self.cacheFolder;
-        AVURLAsset *asset = [AVURLAsset assetWithURL:[server replaceSystemSchemeOfURL:_url]];
-        [asset.resourceLoader setDelegate:server queue:dispatch_get_main_queue()];
-        _item = [AVPlayerItem playerItemWithAsset:asset];
-        
-        self.proxyServer = server;
-        self.asset = asset;
-        
-        
-    }
+    _item = item;
     
     // 监听Item属性需要在Item与Player关联之前
     [self itemAddObserver];
@@ -272,9 +269,9 @@
     self.player.muted = muted;
 }
 
-- (void)setDowload:(BOOL)dowload {
-    _dowload = dowload;
-    self.proxyServer.dowload = dowload;
+- (void)setDownload:(BOOL)download {
+    _download = download;
+    self.proxyServer.download = download;
 }
 
 #pragma mark - Observer

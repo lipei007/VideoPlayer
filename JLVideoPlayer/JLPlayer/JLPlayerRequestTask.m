@@ -88,10 +88,13 @@
     }
     
     self.expectedSize = videoLength;
+    
+    NSString *mimeType = [dic valueForKey:@"Content-Type"];
+    NSString *fileName = response.suggestedFilename;
 
-    if (self.delegate && [self.delegate respondsToSelector:@selector(requestTask:didReceiveResponse:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(requestTask:didReceiveFile:size:mimeType:)]) {
         
-        [self.delegate requestTask:self didReceiveResponse:response];
+        [self.delegate requestTask:self didReceiveFile:fileName size:self.expectedSize mimeType:mimeType];
     }
     
     completionHandler(NSURLSessionResponseAllow);

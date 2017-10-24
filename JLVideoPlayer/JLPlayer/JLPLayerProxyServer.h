@@ -15,7 +15,7 @@
 @interface JLPLayerProxyServer : NSObject <AVAssetResourceLoaderDelegate>
 
 @property (nonatomic,copy) NSString *cacheFolder;
-@property (nonatomic,assign) BOOL dowload;
+@property (nonatomic,assign) BOOL download;
 
 - (NSURL *)replaceSystemSchemeOfURL:(NSString *)url;
 

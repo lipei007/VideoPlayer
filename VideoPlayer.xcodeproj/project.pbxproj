@@ -93,19 +93,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B886CBC41E618429001BC2C9 /* JLPlayer */ = {
-			isa = PBXGroup;
-			children = (
-				B886CBC11E5DD49A001BC2C9 /* JLVideoPlayerManager.h */,
-				B886CBC21E5DD49A001BC2C9 /* JLVideoPlayerManager.m */,
-				B886CBC51E61845F001BC2C9 /* JLPLayerProxyServer.h */,
-				B886CBC61E61845F001BC2C9 /* JLPLayerProxyServer.m */,
-				B886CBC81E618475001BC2C9 /* JLPlayerRequestTask.h */,
-				B886CBC91E618475001BC2C9 /* JLPlayerRequestTask.m */,
-			);
-			name = JLPlayer;
-			sourceTree = "<group>";
-		};
 		B8C08A101E5B2D11007EBCA7 = {
 			isa = PBXGroup;
 			children = (
@@ -176,9 +163,22 @@
 				B8C08A531E5B2D82007EBCA7 /* JLVideoPlayerController.m */,
 				B8C08A551E5C62BD007EBCA7 /* JLCacheSlider.h */,
 				B8C08A561E5C62BD007EBCA7 /* JLCacheSlider.m */,
-				B886CBC41E618429001BC2C9 /* JLPlayer */,
+				BDB507E21F9F732B00700034 /* JLPlayer */,
 			);
 			path = JLVideoPlayer;
+			sourceTree = "<group>";
+		};
+		BDB507E21F9F732B00700034 /* JLPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				B886CBC11E5DD49A001BC2C9 /* JLVideoPlayerManager.h */,
+				B886CBC21E5DD49A001BC2C9 /* JLVideoPlayerManager.m */,
+				B886CBC51E61845F001BC2C9 /* JLPLayerProxyServer.h */,
+				B886CBC61E61845F001BC2C9 /* JLPLayerProxyServer.m */,
+				B886CBC81E618475001BC2C9 /* JLPlayerRequestTask.h */,
+				B886CBC91E618475001BC2C9 /* JLPlayerRequestTask.m */,
+			);
+			path = JLPlayer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

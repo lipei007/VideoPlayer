@@ -16,7 +16,7 @@
 
 - (void)requestTask:(JLPlayerRequestTask *)requestTask didFinishWithError:(NSError *)error;
 
-- (void)requestTask:(JLPlayerRequestTask *)requestTask didReceiveResponse:(NSURLResponse *)response;
+- (void)requestTask:(JLPlayerRequestTask *)requestTask didReceiveFile:(NSString *)filename size:(unsigned long long)size mimeType:(NSString *)type;
 
 - (void)requestTask:(JLPlayerRequestTask *)requestTask didReceiveData:(NSData *)data;
 

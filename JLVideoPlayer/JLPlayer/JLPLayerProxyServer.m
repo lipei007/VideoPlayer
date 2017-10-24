@@ -22,6 +22,8 @@
 
 @property (nonatomic,strong) NSMutableData *data;
 @property (nonatomic,copy) NSString *mimeType;
+@property (nonatomic,assign) unsigned long long expectedSize;
+@property (nonatomic,copy) NSString *fileName;
 @property (nonatomic,strong) NSURL *url;
 
 @end
@@ -117,13 +119,14 @@
         CFStringRef contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef)mimeType, NULL);
         contentInfomationRequest.byteRangeAccessSupported = YES;
         contentInfomationRequest.contentType = CFBridgingRelease(contentType);
-        contentInfomationRequest.contentLength = self.requesTask.expectedSize;
+        contentInfomationRequest.contentLength = self.expectedSize;
         
     }
 }
 
 - (void)processRequests {
     
+    // 资源竞争
     @synchronized (self) { //解决_NSArrayM: 0xb550c30> was mutated while being enumerated
         NSMutableArray <AVAssetResourceLoadingRequest *> *finishRequests = [NSMutableArray array];
         
@@ -146,7 +149,8 @@
 #pragma mark - AVAssetResourceLoaderDelegate
 
 - (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest {
-    
+    NSLog(@"request: %@",loadingRequest);
+    // 判断是否支持请求链接，若支持，则返回YES，并开始下载视频，边下载，边传给Player显示播放。
     if (!self.requesTask) {
         NSString *urlStr = loadingRequest.request.URL.absoluteString;
         NSURL *URL = [self replaceURL:urlStr scheme:@"jlScheme" recover:YES];
@@ -173,25 +177,15 @@
 
 #pragma mark - Request Task Delegate
 
-- (void)requestTask:(JLPlayerRequestTask *)requestTask didReceiveResponse:(NSURLResponse *)response {
+- (void)requestTask:(JLPlayerRequestTask *)requestTask didReceiveFile:(NSString *)filename size:(unsigned long long)size mimeType:(NSString *)type {
 
-    
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
-    NSDictionary *dic = (NSDictionary *)[httpResponse allHeaderFields] ;
-    NSString *content = [dic valueForKey:@"Content-Range"];
-    self.mimeType = [dic valueForKey:@"Content-Type"];
-    
-    NSArray *array = [content componentsSeparatedByString:@"/"];
-    NSString *length = array.lastObject;
-    NSUInteger fileLength;
-    
-    if ([length integerValue] == 0) {
-        fileLength = (NSUInteger)httpResponse.expectedContentLength;
+    self.expectedSize = size;
+    self.mimeType = type;
+    if (filename) {
+        self.fileName = filename;
+    } else {
+        self.fileName = [NSUUID UUID].UUIDString;
     }
-    else {
-        fileLength = [length integerValue];
-    }
-    
 }
 
 - (void)requestTask:(JLPlayerRequestTask *)requestTask didReceiveData:(NSData *)data {
@@ -204,7 +198,7 @@
     
     [self processRequests];
     
-    if (self.dowload) {
+    if (self.download) {
         if (!error && requestTask.offset == 0) {
             NSString *path = nil;
             if (self.cacheFolder.length) {
@@ -213,7 +207,7 @@
                 NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
                 path = [cachePath stringByAppendingPathComponent:@"downloadVideo"];
             }
-            path = [path stringByAppendingPathComponent:self.url.absoluteString.lastPathComponent];
+            path = [path stringByAppendingPathComponent:self.fileName];
             [self.data writeToFile:path atomically:NO];
             
         }
