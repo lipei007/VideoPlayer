@@ -206,7 +206,11 @@
         _player = [AVPlayer playerWithPlayerItem:_item];
         self.playerLayer.player = _player;
     } else {
+        //  清除前一个视频最后一帧显示图像
+        self.playerLayer.player = nil;
+        [self.playerLayer setNeedsDisplay];
         [_player replaceCurrentItemWithPlayerItem:_item];
+        self.playerLayer.player = _player;
     }
 
     

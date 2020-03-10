@@ -149,7 +149,7 @@
 #pragma mark - AVAssetResourceLoaderDelegate
 
 - (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest {
-    NSLog(@"request: %@",loadingRequest);
+    NSLog(@"=====request: %lu   %lu",loadingRequest.dataRequest.requestedOffset,loadingRequest.dataRequest.requestedLength);
     // 判断是否支持请求链接，若支持，则返回YES，并开始下载视频，边下载，边传给Player显示播放。
     if (!self.requesTask) {
         NSString *urlStr = loadingRequest.request.URL.absoluteString;

@@ -48,7 +48,7 @@
     [super viewWillAppear:animated];
     
     self.manager.url = @"http://baobab.kaiyanapp.com/api/v1/playUrl?vid=27378&editionType=normal&source=qcloud";
-
+//    self.manager.url = @"http://127.0.0.1/%E6%9D%83%E5%8A%9B%E7%9A%84%E6%B8%B8%E6%88%8F.Game.of.Throne.mp4";
 }
 
 
@@ -57,7 +57,7 @@
     if (!_manager) {
         _manager = [[JLVideoPlayerManager alloc] init];
         _manager.delegate = self;
-        _manager.download = YES;
+        _manager.download = NO;
         _manager.cacheFolder = @"/Users/jacklee/Downloads";
     }
     return _manager;
